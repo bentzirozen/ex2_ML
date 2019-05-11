@@ -10,13 +10,6 @@ def read_date(data):
             idx[0] = sex_dict[idx[0]]
             X.append(np.array(idx,dtype=np.float64))
     return np.asanyarray(X)
-def _init_wights():
-    rows = 3
-    columns = 8
-    wights = [[0 for column in range(columns)] for row in range(rows)]
-    wights = np.asarray(wights)
-    wights = wights.astype(np.float)
-    return wights
 
 def main(args):
     X = read_date(args[1])
@@ -28,7 +21,6 @@ def perceptron(X,Y):
     d = len(X[0])
     #3 - 3 types of weights
     w = np.zeros(shape=(3,d))
-   # w = _init_wights()
     for _ in range(iters):
         for x,y in zip(X,Y):
             y = float(y)
@@ -39,15 +31,8 @@ def perceptron(X,Y):
                 y_hat = int(y_hat)
                 w[y, :]+=eta * x
                 w[y_hat,:]+= -eta*x
-    print("finished without errors")
-
-
-
-
-
-
-
-
+            p = np.argmin(np.dot(w,x))
+            print(p)
 if __name__ == '__main__':
     main(['ex2.py', 'train_x.txt', 'train_y.txt', 'test_x.txt'])
 
