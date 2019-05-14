@@ -2,7 +2,7 @@ from numpy.random.mtrand import shuffle
 import numpy as np
 
 def perceptron(X,Y):
-        min_max_norm(X)
+        np.linalg.norm(X,ord=2)
         orig = X
         eta = 0.1
         iters = 20
@@ -24,7 +24,7 @@ def perceptron(X,Y):
 def passive_agressive(X,Y):
     iters = 50
     weights_arr = np.zeros(3, X.shape[1])
-    for i in range(50):
+    for i in range(iters):
         set = np.c_[X, Y]
         shuffle(set)
         for x, y in zip(X, Y):
@@ -32,13 +32,10 @@ def passive_agressive(X,Y):
             y_hat = np.argmax(np.dot(weights_arr, x))
             # update
             if y != y_hat:
-                loss = loss_function_pa(weights_arr, y, y_hat, x)
+                loss = max(0.0, 1 - np.dot(weights_arr[y], x) + np.dot(weights_arr[y_hat], x))
                 loss /= ((np.power(np.linalg.norm(x, ord=2), 2)) * 2)
                 weights_arr[y, :] = weights_arr[y, :] + loss * x
                 weights_arr[y_hat, :] = weights_arr[y_hat, :] - loss * x
-
-def loss_function_pa(weights_arr, y, y_hat, x):
-    return max(0.0, 1 - np.dot(weights_arr[y], x) + np.dot(weights_arr[y_hat], x))
 
 def min_max_norm(examples):
 
